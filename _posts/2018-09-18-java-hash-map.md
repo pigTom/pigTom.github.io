@@ -68,12 +68,6 @@ class C implements Comparable<C>,如果是则需要调用他们的compareTo方�
 	// 将树状的桶转化为链状桶的极限阈值，即当桶数量小于这个阈值时，桶要变成链状。
     static final int UNTREEIFY_THRESHOLD = 6
     
-    /**
-     * The smallest table capacity for which bins may be treeified.
-     * (Otherwise the table is resized if too many nodes in a bin.)
-     * Should be at least 4 * TREEIFY_THRESHOLD to avoid conflicts
-     * between resizing and treeification thresholds.
-     */
 	// 桶可以变成树结点的最小哈希表容量
 	// 为了避免在重新调整哈希表的大小和让桶变成树这两个操作矛盾
 	// 这个值应该至少是*TREEIFY_THRESHOL*的四倍

@@ -13,21 +13,25 @@
 # you will see them accessed via {{ site.title }}, {{ site.email }}, and so on.
 # You can create any custom variable you would like, and they will be accessible
 # in the templates via {{ site.myvariable }}.
-title: Gone With The Wind
-email: 1264875853@qq.com
-description: >- # this means to ignore newlines until "baseurl:"
-  It is a truth universally acknowleged, that a single man in possession of a good fortune,
-  must be in want of a wife.
-baseurl: "/" # the subpath of your site, e.g. /blog
-url: "https://pigtom.github.io" # the base hostname & protocol for your site, e.g. http://example.com
-github_username: pigTom
+title:              Gone With The Wind
+email:              13393895196@163.com
+author:             pigTom
+description:        业精于勤，荒于嘻。行成于思，毁于随。
+baseurl:            "/pigtom-blog" # the subpath of your site, e.g. /blog
+url:                "https://pigtom.github.io"
+
+# Social Profiles
+github_username:    pigTom
+facebook_username:  13393895196
 
 # Build settings
-markdown: kramdown
-theme: jekyll-theme-clean-blog
+markdown:           kramdown
+theme:              jekyll-theme-clean-blog
+paginate:      5
+paginate_path:      "/posts/page:num/"
 plugins:
   - jekyll-feed
-
+  - jekyll-paginate
 # Exclude from processing.
 # The following items will not be processed, by default. Create a custom list
 # to override the default setting.

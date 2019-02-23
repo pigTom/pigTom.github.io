@@ -1,6 +1,6 @@
----
+--- 
 layout: post
-title: java HashMap 笔记
+title: Java HashMap 笔记
 subtitle: HashMap内部实现细节
 author: pigTom
 date: 2018-09-18 23:09:30

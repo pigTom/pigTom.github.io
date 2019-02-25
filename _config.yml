@@ -17,7 +17,6 @@ title:              Gone With The Wind
 email:              13393895196@163.com
 author:             pigTom
 description:        业精于勤，荒于嘻。行成于思，毁于随。
-baseurl:            "/pigtom-blog" # the subpath of your site, e.g. /blog
 url:                "https://pigtom.github.io"
 
 # Social Profiles

@@ -19,6 +19,12 @@ author:             pigTom
 description:        业精于勤，荒于嘻。行成于思，毁于随。
 url:                "https://pigtom.github.io"
 show_downloads:     true
+github:
+    repository_url: "https://github.com/pigtom/pigtom.github.io"
+    repository_name: "pigTom"
+    is_project_page: true
+    owner_url: https://pigtom.github.io
+    owner_name: 唐敦红
 goole_analytics: 
 
 # Social Profiles

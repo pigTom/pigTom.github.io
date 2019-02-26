@@ -18,6 +18,8 @@ email:              13393895196@163.com
 author:             pigTom
 description:        业精于勤，荒于嘻。行成于思，毁于随。
 url:                "https://pigtom.github.io"
+show_downloads:     true
+goole_analytics: 
 
 # Social Profiles
 github_username:    pigTom
@@ -25,7 +27,7 @@ facebook_username:  13393895196
 
 # Build settings
 markdown:           kramdown
-theme:              jekyll-theme-clean-blog
+theme:              jekyll-theme-cayman
 paginate:      5
 paginate_path:      "/posts/page:num/"
 plugins:

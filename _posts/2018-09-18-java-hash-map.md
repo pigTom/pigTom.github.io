@@ -1,5 +1,5 @@
 --- 
-layout: post
+layout: cayman
 title: Java HashMap 笔记
 subtitle: HashMap内部实现细节
 author: pigTom

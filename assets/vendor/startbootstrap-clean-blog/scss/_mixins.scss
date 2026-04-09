@@ -1,32 +1,34 @@
+@use "sass:color" as color;
+
 // Mixins
 // Bootstrap Button Variant
-@mixin button-variant($color, $background, $border) {
-  color: $color;
+@mixin button-variant($btn-color, $background, $border) {
+  color: $btn-color;
   border-color: $border;
   background-color: $background;
   &.focus,
   &:focus {
-    color: $color;
-    border-color: darken($border, 25%);
-    background-color: darken($background, 10%);
+    color: $btn-color;
+    border-color: color.adjust($border, $lightness: -25%);
+    background-color: color.adjust($background, $lightness: -10%);
   }
   &:hover {
-    color: $color;
-    border-color: darken($border, 12%);
-    background-color: darken($background, 10%);
+    color: $btn-color;
+    border-color: color.adjust($border, $lightness: -12%);
+    background-color: color.adjust($background, $lightness: -10%);
   }
   &.active,
   &:active,
   .open > &.dropdown-toggle {
-    color: $color;
-    border-color: darken($border, 12%);
-    background-color: darken($background, 10%);
+    color: $btn-color;
+    border-color: color.adjust($border, $lightness: -12%);
+    background-color: color.adjust($background, $lightness: -10%);
     &.focus,
     &:focus,
     &:hover {
-      color: $color;
-      border-color: darken($border, 25%);
-      background-color: darken($background, 17%);
+      color: $btn-color;
+      border-color: color.adjust($border, $lightness: -25%);
+      background-color: color.adjust($background, $lightness: -17%);
     }
   }
   &.active,
@@ -46,7 +48,7 @@
   }
   .badge {
     color: $background;
-    background-color: $color;
+    background-color: $btn-color;
   }
 }
 @mixin transition-all() {

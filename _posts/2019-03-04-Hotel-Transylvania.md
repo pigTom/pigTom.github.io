@@ -1,6 +1,6 @@
 ---
 background: '/img/three_cute.png'
-author: site.author
+author: pigTom
 date: 2019-03-04 22:33:00
 layout: post
 subtitle: educational,impressive

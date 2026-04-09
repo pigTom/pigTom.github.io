@@ -1,3 +1,10 @@
+---
+layout: post
+title: 关于RestTemplate的一点疑问
+author: pigTom
+date: 2020-01-06 00:00:00 +0800
+---
+
 ## RestTemplate 
 
 *RestTemplate*是Spring提供给用户使用生成同步客户端http请求的工具

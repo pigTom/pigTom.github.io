@@ -1,0 +1,1610 @@
+---
+layout: null
+permalink: /society-of-mind/
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Society of Mind — An Interactive Exploration</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Crimson+Text:ital,wght@0,400;0,600;1,400;1,600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #060a12;
+  --bg2: #0c1422;
+  --bg3: #101828;
+  --text: #f0e4c8;
+  --text-mid: #c0b090;
+  --text-dim: #706050;
+  --gold: #c8962a;
+  --gold-b: #e8b848;
+  --gold-glow: rgba(200,150,42,0.25);
+  --teal: #2898b0;
+  --teal-b: #40c0d0;
+  --teal-glow: rgba(40,152,176,0.25);
+  --red: #c04030;
+  --red-b: #e06050;
+  --green: #3a9060;
+  --green-b: #58c080;
+  --purple: #7858c0;
+  --orange: #c07028;
+  --border: rgba(200,150,42,0.18);
+  --border-d: rgba(200,150,42,0.07);
+  --ff-head: 'Playfair Display', Georgia, serif;
+  --ff-mono: 'Space Mono', 'Courier New', monospace;
+  --ff-body: 'Crimson Text', Georgia, serif;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { background: var(--bg); color: var(--text); font-family: var(--ff-body); font-size: 18px; line-height: 1.7; overflow-x: hidden; }
+
+/* ─── NAV ─── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+  padding: 0.75rem 2.5rem; display: flex; align-items: center; justify-content: space-between;
+  backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+  background: rgba(6,10,18,0.88); border-bottom: 1px solid var(--border-d);
+}
+.nav-brand { font-family: var(--ff-mono); font-size: 0.65rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--gold); }
+.nav-links { display: flex; gap: 2rem; list-style: none; }
+.nav-links a { font-family: var(--ff-mono); font-size: 0.62rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-dim); text-decoration: none; transition: color 0.2s; }
+.nav-links a:hover { color: var(--gold); }
+
+/* ─── HERO ─── */
+#hero { min-height: 100vh; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
+#hero-canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+.hero-inner { position: relative; z-index: 2; text-align: center; max-width: 820px; padding: 5rem 2rem 2rem; }
+.hero-eyebrow { font-family: var(--ff-mono); font-size: 0.65rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--gold); margin-bottom: 1.4rem; opacity: 0; animation: fadeUp 0.9s 0.4s ease forwards; }
+.hero-title { font-family: var(--ff-head); font-weight: 900; font-size: clamp(2.8rem, 7.5vw, 6rem); line-height: 1.04; letter-spacing: -0.02em; margin-bottom: 1rem; opacity: 0; animation: fadeUp 0.9s 0.7s ease forwards; }
+.hero-title em { color: var(--gold); font-style: italic; }
+.hero-sub { font-family: var(--ff-body); font-style: italic; font-size: 1.05rem; color: var(--text-mid); margin-bottom: 2.8rem; opacity: 0; animation: fadeUp 0.9s 1s ease forwards; }
+.hero-quote { font-style: italic; font-size: 1.1rem; color: var(--text-mid); max-width: 580px; margin: 0 auto 3rem; line-height: 1.9; border-left: 2px solid var(--gold); padding-left: 1.5rem; text-align: left; opacity: 0; animation: fadeUp 0.9s 1.3s ease forwards; }
+.hero-stat-row { display: flex; gap: 3rem; justify-content: center; margin-bottom: 1rem; opacity: 0; animation: fadeUp 0.9s 1.6s ease forwards; }
+.hero-stat { text-align: center; }
+.hero-stat-num { font-family: var(--ff-head); font-weight: 700; font-size: 2rem; color: var(--gold); display: block; }
+.hero-stat-label { font-family: var(--ff-mono); font-size: 0.6rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-dim); }
+.scroll-hint { position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: 0.6rem; font-family: var(--ff-mono); font-size: 0.58rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--text-dim); opacity: 0; animation: fadeIn 1s 2.2s ease forwards; }
+.scroll-bar { width: 1px; height: 44px; background: linear-gradient(var(--gold), transparent); animation: barPulse 2s 2.2s ease-in-out infinite; }
+
+/* ─── SHARED SECTION STYLES ─── */
+.sec { padding: 6rem 0; position: relative; border-top: 1px solid var(--border-d); }
+.container { max-width: 1100px; margin: 0 auto; padding: 0 2.5rem; }
+.sec-head { display: flex; align-items: flex-start; gap: 2rem; margin-bottom: 3rem; }
+.ch-badge { font-family: var(--ff-mono); font-size: 0.62rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); border: 1px solid var(--border); padding: 0.3em 0.9em; white-space: nowrap; flex-shrink: 0; margin-top: 0.8rem; }
+.sec-title-block h2 { font-family: var(--ff-head); font-weight: 700; font-size: clamp(1.7rem, 2.5vw, 2.4rem); margin-bottom: 0.5rem; }
+.sec-title-block p { color: var(--text-mid); font-size: 1rem; max-width: 580px; line-height: 1.65; }
+.sec-quote { font-style: italic; color: var(--text-dim); border-left: 2px solid var(--border); padding-left: 1.5rem; margin: 1.5rem 0 2.5rem; font-size: 1rem; max-width: 640px; }
+.reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.8s ease, transform 0.8s ease; }
+.reveal.on { opacity: 1; transform: none; }
+
+/* ─── BTN ─── */
+.btn { font-family: var(--ff-mono); font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase; background: transparent; border: 1px solid var(--gold); color: var(--gold); padding: 0.55em 1.6em; cursor: pointer; transition: all 0.2s; }
+.btn:hover { background: var(--gold); color: var(--bg); }
+.btn-teal { border-color: var(--teal); color: var(--teal); }
+.btn-teal:hover { background: var(--teal); color: var(--bg); }
+.btn-sm { font-size: 0.62rem; padding: 0.4em 1.1em; }
+
+/* ─── CANVAS BOX ─── */
+.canvas-box { background: var(--bg2); border: 1px solid var(--border); border-radius: 3px; overflow: hidden; }
+
+/* ─── §1 AGENTS ─── */
+.agents-layout { display: grid; grid-template-columns: 1fr 340px; gap: 2rem; align-items: start; }
+#agent-canvas { width: 100%; height: 460px; display: block; }
+.agent-panel { display: flex; flex-direction: column; gap: 0.75rem; }
+.agent-card { background: rgba(255,255,255,0.02); border: 1px solid var(--border-d); padding: 1rem 1.2rem; border-radius: 2px; transition: all 0.25s; }
+.agent-card.lit { border-color: var(--gold); background: rgba(200,150,42,0.06); }
+.agent-card .ac-name { font-family: var(--ff-mono); font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.3rem; }
+.agent-card .ac-desc { font-size: 0.88rem; color: var(--text-mid); line-height: 1.5; }
+.agent-card .ac-level { font-family: var(--ff-mono); font-size: 0.6rem; color: var(--text-dim); margin-top: 0.3rem; }
+
+/* ─── §2 K-LINES ─── */
+#klines-canvas { width: 100%; height: 480px; display: block; }
+.klines-triggers { display: flex; gap: 0.75rem; margin-top: 1.25rem; flex-wrap: wrap; }
+.trig-btn { font-family: var(--ff-mono); font-size: 0.68rem; letter-spacing: 0.08em; text-transform: uppercase; background: transparent; border: 1px solid rgba(40,152,176,0.35); color: var(--teal); padding: 0.45em 1.2em; cursor: pointer; transition: all 0.2s; }
+.trig-btn:hover, .trig-btn.active { background: var(--teal); color: var(--bg); border-color: var(--teal); }
+.klines-legend { display: flex; gap: 1.5rem; margin-top: 1rem; flex-wrap: wrap; }
+.kl-legend-item { display: flex; align-items: center; gap: 0.5rem; font-family: var(--ff-mono); font-size: 0.6rem; color: var(--text-dim); letter-spacing: 0.08em; text-transform: uppercase; }
+.kl-dot { width: 8px; height: 8px; border-radius: 50%; }
+
+/* ─── §3 FRAMES ─── */
+.frames-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; align-items: start; }
+.scene-btns { display: flex; gap: 0.75rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
+.frame-card { background: var(--bg2); border: 1px solid var(--border); padding: 1.8rem 2rem; min-height: 420px; }
+.frame-card-title { font-family: var(--ff-mono); font-size: 0.65rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--gold); margin-bottom: 1.5rem; padding-bottom: 0.8rem; border-bottom: 1px solid var(--border-d); display: flex; align-items: center; justify-content: space-between; }
+.frame-name { font-family: var(--ff-head); font-weight: 700; font-size: 1.3rem; color: var(--text); }
+.slot-row { display: grid; grid-template-columns: 110px 1fr; gap: 0.75rem; align-items: start; margin-bottom: 0.9rem; opacity: 0; transform: translateX(-8px); transition: all 0.35s ease; }
+.slot-row.shown { opacity: 1; transform: none; }
+.slot-key { font-family: var(--ff-mono); font-size: 0.6rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-dim); padding-top: 0.25rem; }
+.slot-val { font-size: 0.92rem; color: var(--text); padding: 0.35rem 0.8rem; background: rgba(255,255,255,0.025); border-left: 2px solid var(--gold); line-height: 1.45; }
+.slot-val.default-val { border-left-color: var(--teal); color: var(--text-mid); font-style: italic; }
+.slot-val.surprise { border-left-color: var(--red); color: var(--red-b); }
+.surprise-tag { display: inline-block; font-family: var(--ff-mono); font-size: 0.55rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--red); border: 1px solid var(--red); padding: 0.15em 0.5em; margin-left: 0.5rem; vertical-align: middle; animation: blinkPulse 1.5s ease-in-out infinite; }
+.frame-explainer { background: var(--bg2); border: 1px solid var(--border-d); padding: 1.5rem 2rem; }
+.frame-explainer h3 { font-family: var(--ff-head); font-weight: 700; font-style: normal; font-size: 1.05rem; color: var(--gold); margin-bottom: 0.75rem; }
+.frame-explainer p { font-size: 0.92rem; color: var(--text-mid); line-height: 1.65; margin-bottom: 0.6rem; }
+.legend-row { display: flex; gap: 1.5rem; margin-top: 1rem; flex-wrap: wrap; }
+.legend-item { display: flex; align-items: center; gap: 0.5rem; font-size: 0.8rem; color: var(--text-dim); }
+.legend-line { width: 18px; height: 2px; }
+
+/* ─── §4 DIFFERENCE ENGINE ─── */
+.diff-layout { display: grid; grid-template-columns: 1fr 80px 1fr; gap: 1rem; align-items: start; margin-bottom: 1.5rem; }
+.state-box { background: var(--bg2); border: 1px solid var(--border); padding: 1.5rem; }
+.state-lbl { font-family: var(--ff-mono); font-size: 0.62rem; letter-spacing: 0.2em; text-transform: uppercase; padding-bottom: 0.6rem; margin-bottom: 1.2rem; border-bottom: 1px solid var(--border-d); }
+.state-lbl.cur-lbl { color: var(--text-dim); }
+.state-lbl.goal-lbl { color: var(--green-b); }
+#diff-canvas { width: 100%; height: 320px; display: block; }
+.engine-mid { display: flex; flex-direction: column; align-items: center; justify-content: flex-start; gap: 0.75rem; padding-top: 2.5rem; }
+.gear-wrap { width: 56px; height: 56px; border: 2px solid var(--gold); display: flex; align-items: center; justify-content: center; }
+.gear-wrap.spinning .gear-icon { animation: spin 1.8s linear infinite; }
+.gear-icon { font-size: 1.6rem; line-height: 1; display: block; }
+.diff-log { background: var(--bg2); border: 1px solid var(--border); padding: 1.5rem; height: 280px; overflow-y: auto; font-family: var(--ff-mono); font-size: 0.68rem; line-height: 1.9; }
+.log-line { opacity: 0; transition: opacity 0.3s; }
+.log-line.show { opacity: 1; }
+.log-line.engine-line { color: var(--gold); }
+.log-line.sub-line { color: var(--teal); padding-left: 1.2rem; }
+.log-line.ok-line { color: var(--green-b); }
+.log-line.diff-line { color: var(--red-b); }
+.log-line.dim-line { color: var(--text-dim); }
+
+/* ─── §5 EMERGENCE / BOIDS ─── */
+#boids-canvas { width: 100%; height: 480px; display: block; }
+.rules-row { display: flex; gap: 1rem; margin-top: 1.5rem; }
+.rule-card { flex: 1; background: rgba(255,255,255,0.02); border: 1px solid var(--border-d); padding: 1rem 1.2rem; cursor: pointer; transition: all 0.22s; user-select: none; }
+.rule-card.on { border-color: var(--teal); background: rgba(40,152,176,0.06); }
+.rule-card .rc-top { display: flex; align-items: center; gap: 0.6rem; margin-bottom: 0.5rem; }
+.rc-dot { width: 9px; height: 9px; border-radius: 50%; background: var(--border); flex-shrink: 0; transition: background 0.2s; }
+.rule-card.on .rc-dot { background: var(--teal); }
+.rc-name { font-family: var(--ff-mono); font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-dim); transition: color 0.2s; }
+.rule-card.on .rc-name { color: var(--teal); }
+.rc-desc { font-size: 0.85rem; color: var(--text-dim); line-height: 1.5; }
+
+/* ─── §6 KEY TERMS ─── */
+.realm-filters { display: flex; gap: 0.5rem; margin-bottom: 2rem; flex-wrap: wrap; }
+.realm-f { font-family: var(--ff-mono); font-size: 0.62rem; letter-spacing: 0.1em; text-transform: uppercase; background: transparent; border: 1px solid var(--border-d); color: var(--text-dim); padding: 0.38em 0.9em; cursor: pointer; transition: all 0.2s; }
+.realm-f.on { color: var(--gold); border-color: var(--gold); }
+.realm-f:hover { border-color: var(--border); color: var(--text-mid); }
+.terms-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(270px, 1fr)); gap: 1rem; }
+.term-card { background: rgba(255,255,255,0.02); border: 1px solid var(--border-d); padding: 1.2rem 1.4rem; transition: all 0.2s; }
+.term-card:hover { background: rgba(255,255,255,0.04); }
+.tc-realm { font-family: var(--ff-mono); font-size: 0.58rem; letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 0.4rem; opacity: 0.75; }
+.tc-name { font-family: var(--ff-head); font-weight: 700; font-size: 1.1rem; margin-bottom: 0.5rem; }
+.tc-def { font-size: 0.88rem; color: var(--text-mid); line-height: 1.5; margin-bottom: 0.35rem; }
+.tc-plain { font-size: 0.8rem; color: var(--text-dim); font-style: italic; }
+.term-card[data-realm="mind"] { --rc: #c8962a; }
+.term-card[data-realm="systems"] { --rc: #28a0b0; }
+.term-card[data-realm="memory"] { --rc: #c05828; }
+.term-card[data-realm="reasoning"] { --rc: #7858c0; }
+.term-card[data-realm="self"] { --rc: #3a9060; }
+.term-card[data-realm="comm"] { --rc: #c07828; }
+.term-card[data-realm="perception"] { --rc: #3878c0; }
+.tc-realm { color: var(--rc, var(--gold)); }
+.tc-name { color: var(--rc, var(--gold)); }
+.term-card:hover { border-color: color-mix(in srgb, var(--rc, var(--gold)) 40%, transparent); }
+
+/* ─── FOOTER ─── */
+footer { border-top: 1px solid var(--border-d); padding: 3rem 0; text-align: center; }
+footer p { font-family: var(--ff-mono); font-size: 0.62rem; letter-spacing: 0.12em; color: var(--text-dim); margin-bottom: 0.4rem; }
+footer .footer-title { font-family: var(--ff-head); font-style: italic; font-size: 1.1rem; color: var(--text-mid); margin-bottom: 0.75rem; }
+
+/* ─── KEYFRAMES ─── */
+@keyframes fadeUp { from { opacity:0; transform:translateY(22px); } to { opacity:1; transform:none; } }
+@keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+@keyframes barPulse { 0%,100%{opacity:0.3;} 50%{opacity:1;} }
+@keyframes spin { from{transform:rotate(0deg);} to{transform:rotate(360deg);} }
+@keyframes blinkPulse { 0%,100%{opacity:0.5;} 50%{opacity:1;} }
+@keyframes nodePulse { 0%,100%{r:5;} 50%{r:7;} }
+
+/* ─── RESPONSIVE ─── */
+@media (max-width:800px) {
+  .agents-layout,.frames-layout { grid-template-columns:1fr; }
+  .diff-layout { grid-template-columns:1fr; }
+  .diff-layout .engine-mid { flex-direction:row; padding:0; }
+  .rules-row { flex-direction:column; }
+  .nav-links { display:none; }
+  .sec-head { flex-direction:column; gap:0.5rem; }
+}
+</style>
+</head>
+<body>
+
+<!-- ═══ NAV ═══ -->
+<nav>
+  <span class="nav-brand">Society of Mind</span>
+  <ul class="nav-links">
+    <li><a href="#agents">Agents</a></li>
+    <li><a href="#klines">K-Lines</a></li>
+    <li><a href="#frames">Frames</a></li>
+    <li><a href="#diffengine">Difference Engine</a></li>
+    <li><a href="#emergence">Emergence</a></li>
+    <li><a href="#terms">Key Terms</a></li>
+  </ul>
+</nav>
+
+<!-- ═══ HERO ═══ -->
+<section id="hero">
+  <canvas id="hero-canvas"></canvas>
+  <div class="hero-inner">
+    <div class="hero-eyebrow">Marvin Minsky · 1986 · An Interactive Exploration</div>
+    <h1 class="hero-title">The Society<br>of <em>Mind</em></h1>
+    <p class="hero-sub">Thirty chapters · Two hundred and seventy essays · One radical thesis</p>
+    <blockquote class="hero-quote">
+      What magical trick makes us intelligent? The trick is that there is no trick. The power of intelligence stems from our vast diversity, not from any single, perfect principle.
+    </blockquote>
+    <div class="hero-stat-row">
+      <div class="hero-stat"><span class="hero-stat-num">30</span><span class="hero-stat-label">Chapters</span></div>
+      <div class="hero-stat"><span class="hero-stat-num">270</span><span class="hero-stat-label">Essays</span></div>
+      <div class="hero-stat"><span class="hero-stat-num">∞</span><span class="hero-stat-label">Agents</span></div>
+    </div>
+  </div>
+  <div class="scroll-hint"><div class="scroll-bar"></div>Scroll</div>
+</section>
+
+<!-- ═══ §1 AGENTS & SOCIETY ═══ -->
+<section class="sec" id="agents">
+  <div class="container">
+    <div class="sec-head reveal">
+      <span class="ch-badge">Chapter 1</span>
+      <div class="sec-title-block">
+        <h2>The Society of Agents</h2>
+        <p>When a child stacks blocks, it looks like one act. But many agents collaborate — SEE, GRASP, PLACE, RELEASE — while BUILDER only knows <em>when to call whom</em>. The mind is not a thing: it's a society.</p>
+      </div>
+    </div>
+    <blockquote class="sec-quote reveal">
+      Each agent, alone, has no intelligence whatsoever. Together, they think.
+    </blockquote>
+    <div class="agents-layout reveal">
+      <div class="canvas-box"><canvas id="agent-canvas"></canvas></div>
+      <div class="agent-panel">
+        <div class="agent-card" id="ac-builder">
+          <div class="ac-name">Builder</div>
+          <div class="ac-desc">Orchestrates the entire sequence. Doesn't see, grasp, or place — only decides <em>who</em> to call and <em>when</em>.</div>
+          <div class="ac-level">Level: Administrative Agent</div>
+        </div>
+        <div class="agent-card" id="ac-see">
+          <div class="ac-name">See</div>
+          <div class="ac-desc">Scans the world. Reports current block positions and the gap between current state and goal.</div>
+          <div class="ac-level">Level: Perceptual Agent</div>
+        </div>
+        <div class="agent-card" id="ac-grasp">
+          <div class="ac-name">Grasp</div>
+          <div class="ac-desc">Reaches and picks up the specified block. Handles the motor complexity of grip.</div>
+          <div class="ac-level">Level: Motor Agent</div>
+        </div>
+        <div class="agent-card" id="ac-place">
+          <div class="ac-name">Place</div>
+          <div class="ac-desc">Positions the block precisely where Builder indicates. Doesn't decide what to place — only where.</div>
+          <div class="ac-level">Level: Motor Agent</div>
+        </div>
+        <div class="agent-card" id="ac-release">
+          <div class="ac-name">Release</div>
+          <div class="ac-desc">Lets go at the right moment. Too early and the block falls; too late and the arch breaks.</div>
+          <div class="ac-level">Level: Motor Agent</div>
+        </div>
+        <button class="btn" id="build-btn" style="margin-top:0.5rem">▶ Build the Arch</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ §2 K-LINES ═══ -->
+<section class="sec" id="klines">
+  <div class="container">
+    <div class="sec-head reveal">
+      <span class="ch-badge">Chapter 8</span>
+      <div class="sec-title-block">
+        <h2>K-Lines: Threads of Memory</h2>
+        <p>A K-Line (Knowledge-Line) connects all agents active during a past experience. Remembering is not <em>reading stored data</em> — it is <em>reactivating</em> the agent-state from that moment.</p>
+      </div>
+    </div>
+    <blockquote class="sec-quote reveal">
+      Memory is not a file. It is a pattern of activation — a cascade that threads through everything that was alive at that moment.
+    </blockquote>
+    <div class="canvas-box reveal"><canvas id="klines-canvas"></canvas></div>
+    <div class="klines-triggers reveal">
+      <button class="trig-btn" data-trigger="rain">☁ Smell of Rain</button>
+      <button class="trig-btn" data-trigger="arch">◻ The Word "Arch"</button>
+      <button class="trig-btn" data-trigger="code">⌥ Debug Session</button>
+      <button class="trig-btn btn-sm btn" data-trigger="reset" style="margin-left:auto">Reset</button>
+    </div>
+    <div class="klines-legend reveal">
+      <div class="kl-legend-item"><div class="kl-dot" style="background:#c8962a"></div>Fully Active</div>
+      <div class="kl-legend-item"><div class="kl-dot" style="background:#28a0b0"></div>Partially Active</div>
+      <div class="kl-legend-item"><div class="kl-dot" style="background:#404858"></div>Dormant</div>
+      <div class="kl-legend-item"><div class="kl-dot" style="background:rgba(200,150,42,0.4);border:1px solid var(--gold)"></div>Seed (Trigger)</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ §3 FRAMES ═══ -->
+<section class="sec" id="frames">
+  <div class="container">
+    <div class="sec-head reveal">
+      <span class="ch-badge">Chapter 24</span>
+      <div class="sec-title-block">
+        <h2>Frames: Templates for Understanding</h2>
+        <p>A Frame is a knowledge template with <em>slots</em> and <em>default values</em>. Walking into a new restaurant, you don't start from scratch — you activate your RESTAURANT frame and fill in the specifics.</p>
+      </div>
+    </div>
+    <blockquote class="sec-quote reveal">
+      Surprise is the signal that a Frame's default value has been violated — and the trigger to update your knowledge.
+    </blockquote>
+    <div class="scene-btns reveal">
+      <button class="btn btn-sm scene-btn active" data-scene="restaurant">Restaurant</button>
+      <button class="btn btn-sm scene-btn" data-scene="office">Home Office</button>
+      <button class="btn btn-sm scene-btn" data-scene="hospital">Hospital</button>
+      <button class="btn btn-sm scene-btn" data-scene="strange">Strange Room ⚡</button>
+    </div>
+    <div class="frames-layout">
+      <div class="frame-card reveal">
+        <div class="frame-card-title">
+          <span>Active Frame</span>
+          <span class="frame-name" id="frame-name">RESTAURANT</span>
+        </div>
+        <div id="frame-slots"></div>
+      </div>
+      <div class="frame-explainer reveal">
+        <h3>How Frames Work</h3>
+        <p>Every Frame has <strong>slots</strong> — positions where specific information fills in. Before any specific info arrives, slots hold <strong>default values</strong> (the blue entries): what's <em>usually</em> true in this situation.</p>
+        <p>When you encounter something that doesn't match a default, you experience <strong>surprise</strong> — the Frame's flag that "your model needs updating." Try the <em>Strange Room</em> scenario.</p>
+        <p>Frames are also <strong>nested</strong>: activating RESTAURANT also activates sub-frames for TABLE, MENU, and PAYMENT — each with their own slots and defaults.</p>
+        <div class="legend-row">
+          <div class="legend-item"><div class="legend-line" style="background:var(--gold)"></div> Specific value</div>
+          <div class="legend-item"><div class="legend-line" style="background:var(--teal)"></div> Default value</div>
+          <div class="legend-item"><div class="legend-line" style="background:var(--red)"></div> Violated default</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ §4 DIFFERENCE ENGINE ═══ -->
+<section class="sec" id="diffengine">
+  <div class="container">
+    <div class="sec-head reveal">
+      <span class="ch-badge">Chapter 7</span>
+      <div class="sec-title-block">
+        <h2>The Difference Engine</h2>
+        <p>The mind solves problems recursively: find the <em>difference</em> between current state and goal, find the agent that eliminates that difference, repeat. Every bug fix, every plan, every step toward a goal follows this loop.</p>
+      </div>
+    </div>
+    <blockquote class="sec-quote reveal">
+      Fixing one difference may introduce new ones. The engine loops until there are no more gaps to close.
+    </blockquote>
+    <div class="reveal">
+      <canvas id="diff-canvas"></canvas>
+      <div style="display:flex;gap:1rem;margin-top:1rem;align-items:flex-start">
+        <div style="flex:1">
+          <div style="display:flex;gap:0.75rem;margin-bottom:1rem;align-items:center">
+            <button class="btn" id="diff-run-btn">▶ Run Engine</button>
+            <button class="btn btn-sm" id="diff-reset-btn">↺ Reset</button>
+            <div class="gear-wrap" id="gear-wrap"><span class="gear-icon">⚙</span></div>
+            <span id="diff-step-label" style="font-family:var(--ff-mono);font-size:0.62rem;color:var(--text-dim);letter-spacing:0.1em"></span>
+          </div>
+        </div>
+      </div>
+      <div class="diff-log" id="diff-log">
+        <div class="log-line show dim-line">// Waiting to run…</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ §5 EMERGENCE / BOIDS ═══ -->
+<section class="sec" id="emergence">
+  <div class="container">
+    <div class="sec-head reveal">
+      <span class="ch-badge">Chapter 2</span>
+      <div class="sec-title-block">
+        <h2>Emergence: Simple Rules, Complex Behavior</h2>
+        <p>No single agent is intelligent. Toggle the three rules below and watch how <em>complex, coordinated behavior</em> emerges from nothing but local interactions — no leader, no blueprint.</p>
+      </div>
+    </div>
+    <blockquote class="sec-quote reveal">
+      Ants aren't smart. Ant colonies are. Each ant follows only local rules — the colony's intelligence is emergent.
+    </blockquote>
+    <div class="canvas-box reveal"><canvas id="boids-canvas"></canvas></div>
+    <div class="rules-row reveal">
+      <div class="rule-card on" data-rule="separation">
+        <div class="rc-top"><div class="rc-dot"></div><span class="rc-name">Separation</span></div>
+        <div class="rc-desc">Steer away from agents that are too close. Prevents crowding. Each agent checks only its nearest neighbors.</div>
+      </div>
+      <div class="rule-card on" data-rule="alignment">
+        <div class="rc-top"><div class="rc-dot"></div><span class="rc-name">Alignment</span></div>
+        <div class="rc-desc">Match heading with neighbors. Creates coordinated motion. No agent "leads" — all respond to local average.</div>
+      </div>
+      <div class="rule-card on" data-rule="cohesion">
+        <div class="rc-top"><div class="rc-dot"></div><span class="rc-name">Cohesion</span></div>
+        <div class="rc-desc">Move toward the center of nearby agents. Forms flocks. Combined with alignment, produces fluid group motion.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ §6 KEY TERMS ═══ -->
+<section class="sec" id="terms">
+  <div class="container">
+    <div class="sec-head reveal">
+      <span class="ch-badge">All 30 Chapters</span>
+      <div class="sec-title-block">
+        <h2>Key Terms by Realm</h2>
+        <p>Each term is a compressed K-Line — a shortcut into an entire analytical framework. Master the word and you activate the whole tool.</p>
+      </div>
+    </div>
+    <div class="realm-filters reveal">
+      <button class="realm-f on" data-realm="all">All</button>
+      <button class="realm-f" data-realm="mind">Mind Architecture</button>
+      <button class="realm-f" data-realm="systems">Systems</button>
+      <button class="realm-f" data-realm="memory">Memory & Learning</button>
+      <button class="realm-f" data-realm="reasoning">Reasoning</button>
+      <button class="realm-f" data-realm="self">Self & Identity</button>
+      <button class="realm-f" data-realm="comm">Communication</button>
+      <button class="realm-f" data-realm="perception">Perception</button>
+    </div>
+    <div class="terms-grid" id="terms-grid"></div>
+  </div>
+</section>
+
+<!-- ═══ FOOTER ═══ -->
+<footer>
+  <div class="container">
+    <p class="footer-title">The Society of Mind</p>
+    <p>Marvin Minsky · Basic Books, 1986</p>
+    <p style="margin-top:0.5rem;font-size:0.58rem;opacity:0.5">An interactive companion to the chapter notes</p>
+  </div>
+</footer>
+
+<script>
+/* ══════════════════════════════════════════════
+   UTILITIES
+══════════════════════════════════════════════ */
+const $ = (sel, ctx=document) => ctx.querySelector(sel);
+const $$ = (sel, ctx=document) => [...ctx.querySelectorAll(sel)];
+const lerp = (a,b,t) => a + (b-a)*t;
+const clamp = (v,lo,hi) => Math.max(lo,Math.min(hi,v));
+const rnd = (lo,hi) => lo + Math.random()*(hi-lo);
+const rndInt = (lo,hi) => Math.floor(rnd(lo,hi+1));
+const TAU = Math.PI*2;
+
+// Resize a canvas to its CSS display size (devicePixelRatio aware)
+function fitCanvas(canvas) {
+  const dpr = window.devicePixelRatio || 1;
+  const rect = canvas.getBoundingClientRect();
+  if (canvas.width !== rect.width*dpr || canvas.height !== rect.height*dpr) {
+    canvas.width = rect.width * dpr;
+    canvas.height = rect.height * dpr;
+    const ctx = canvas.getContext('2d');
+    ctx.scale(dpr,dpr);
+    return true; // resized
+  }
+  return false;
+}
+
+// Scroll reveal
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => { if(e.isIntersecting) { e.target.classList.add('on'); } });
+}, { threshold: 0.12 });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+
+/* ══════════════════════════════════════════════
+   §0  HERO CANVAS — Particle Society
+══════════════════════════════════════════════ */
+(function heroCanvas() {
+  const canvas = $('#hero-canvas');
+  const ctx = canvas.getContext('2d');
+  let W, H, particles=[], raf;
+
+  function resize() {
+    W = canvas.width = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+  }
+
+  function makeParticle() {
+    return {
+      x: rnd(0,W), y: rnd(0,H),
+      vx: rnd(-0.4,0.4), vy: rnd(-0.4,0.4),
+      r: rnd(1,2.5), alpha: rnd(0.15,0.55)
+    };
+  }
+
+  function init() {
+    particles = [];
+    const N = clamp(Math.floor(W*H/9000), 60, 150);
+    for(let i=0;i<N;i++) particles.push(makeParticle());
+  }
+
+  function draw() {
+    ctx.clearRect(0,0,W,H);
+    const n = particles.length;
+
+    for(let i=0;i<n;i++) {
+      const p = particles[i];
+      p.x += p.vx; p.y += p.vy;
+      if(p.x<0) p.x=W; if(p.x>W) p.x=0;
+      if(p.y<0) p.y=H; if(p.y>H) p.y=0;
+    }
+
+    // connections
+    for(let i=0;i<n;i++) {
+      for(let j=i+1;j<n;j++) {
+        const dx=particles[i].x-particles[j].x, dy=particles[i].y-particles[j].y;
+        const d=Math.hypot(dx,dy);
+        if(d<110) {
+          ctx.beginPath();
+          ctx.moveTo(particles[i].x,particles[i].y);
+          ctx.lineTo(particles[j].x,particles[j].y);
+          ctx.strokeStyle=`rgba(200,150,42,${(1-d/110)*0.25})`;
+          ctx.lineWidth=0.6;
+          ctx.stroke();
+        }
+      }
+    }
+
+    // dots
+    for(const p of particles) {
+      ctx.beginPath();
+      ctx.arc(p.x,p.y,p.r,0,TAU);
+      ctx.fillStyle=`rgba(200,150,42,${p.alpha})`;
+      ctx.fill();
+    }
+
+    raf = requestAnimationFrame(draw);
+  }
+
+  resize(); init(); draw();
+  window.addEventListener('resize', ()=>{ resize(); init(); });
+})();
+
+
+/* ══════════════════════════════════════════════
+   §1  AGENT CANVAS — Hierarchy + Block Stacking
+══════════════════════════════════════════════ */
+(function agentSection() {
+  const canvas = $('#agent-canvas');
+  const ctx = canvas.getContext('2d');
+  let W, H, raf;
+
+  // State
+  let step = -1; // -1 = idle, 0..N = animating
+  let stepTimer = 0;
+  const STEP_DELAY = 90; // frames per step
+
+  // Block positions: scattered → arch
+  const blocks = [
+    { id:'L', color:'#7060a8', label:'L', // left pillar
+      cur:{x:0,y:0}, goal:{x:0,y:0}, cur0:{x:0,y:0}, t:0, state:'idle' },
+    { id:'R', color:'#4878a0', label:'R', // right pillar
+      cur:{x:0,y:0}, goal:{x:0,y:0}, cur0:{x:0,y:0}, t:0, state:'idle' },
+    { id:'T', color:'#a08040', label:'T', // top crossbar
+      cur:{x:0,y:0}, goal:{x:0,y:0}, cur0:{x:0,y:0}, t:0, state:'idle' },
+  ];
+
+  // Agent highlight states
+  const agents = ['builder','see','grasp','place','release'];
+  let litAgent = null;
+  let msgParticles = [];
+
+  // Steps for animation
+  const STEPS = [
+    { agent:'builder', msg:'Activate. Assessing goal state…', lit:true },
+    { agent:'see',    msg:'Scanning… Left pillar position identified.', lit:true },
+    { agent:'grasp',  msg:'Grasping block L.', lit:true, moveBlock:0 },
+    { agent:'place',  msg:'Placing block L at pillar position.', lit:true, placeBlock:0 },
+    { agent:'release',msg:'Released. Block L is stable.', lit:true, doneBlock:0 },
+    { agent:'see',    msg:'Scanning… Right pillar needed.', lit:true },
+    { agent:'grasp',  msg:'Grasping block R.', lit:true, moveBlock:1 },
+    { agent:'place',  msg:'Placing block R at pillar position.', lit:true, placeBlock:1 },
+    { agent:'release',msg:'Released. Block R is stable.', lit:true, doneBlock:1 },
+    { agent:'see',    msg:'Both pillars in place. Crossbar next.', lit:true },
+    { agent:'grasp',  msg:'Grasping crossbar T.', lit:true, moveBlock:2 },
+    { agent:'place',  msg:'Placing crossbar T across pillars.', lit:true, placeBlock:2 },
+    { agent:'release',msg:'Released. ARCH COMPLETE.', lit:true, doneBlock:2 },
+    { agent:'builder',msg:'Goal achieved. Society at rest.', lit:false },
+  ];
+
+  function setupPositions() {
+    const dpr = window.devicePixelRatio||1;
+    const rect = canvas.getBoundingClientRect();
+    W = rect.width; H = rect.height;
+    canvas.width = W*dpr; canvas.height = H*dpr;
+    ctx.scale(dpr,dpr);
+
+    const bw=40, bh=22;
+    // Scattered positions (relative, left half)
+    const cx = W*0.52;
+    const scatterPositions = [
+      {x:cx+20, y:H*0.6},
+      {x:cx+85, y:H*0.45},
+      {x:cx+50, y:H*0.28},
+    ];
+    // Goal positions (arch)
+    const archCx = cx+60;
+    const archBase = H*0.75;
+    const pillarH = 3*bh+4;
+    const goalPositions = [
+      // left pillar: stack of 3 (but we simplify to 1 tall block)
+      {x:archCx-36, y:archBase-bh},
+      // right pillar
+      {x:archCx+36, y:archBase-bh},
+      // crossbar
+      {x:archCx, y:archBase-bh-bh-4},
+    ];
+
+    blocks.forEach((b,i)=>{
+      b.cur = {...scatterPositions[i]};
+      b.cur0 = {...scatterPositions[i]};
+      b.goal = {...goalPositions[i]};
+      b.t = 0; b.state = 'idle';
+    });
+  }
+
+  function nodePos(agentName) {
+    // Layout: BUILDER at top center, others below
+    const cx=W*0.27, cy=H*0.5;
+    const positions = {
+      builder: {x:cx, y:cy-120},
+      see:     {x:cx-130, y:cy+20},
+      grasp:   {x:cx-65, y:cy+80},
+      place:   {x:cx+10, y:cy+100},
+      release: {x:cx+90, y:cy+60},
+    };
+    return positions[agentName];
+  }
+
+  function drawHierarchy() {
+    const nodes = ['builder','see','grasp','place','release'];
+    const labelMap = {builder:'BUILDER',see:'SEE',grasp:'GRASP',place:'PLACE',release:'RELEASE'};
+
+    // Draw lines from builder to each child
+    const bp = nodePos('builder');
+    const children = ['see','grasp','place','release'];
+    children.forEach(child => {
+      const cp = nodePos(child);
+      ctx.beginPath();
+      ctx.moveTo(bp.x,bp.y);
+      ctx.lineTo(cp.x,cp.y);
+      ctx.strokeStyle=`rgba(200,150,42,0.18)`;
+      ctx.lineWidth=1;
+      ctx.stroke();
+    });
+
+    // Draw message particles
+    msgParticles = msgParticles.filter(mp=>{
+      mp.t+=0.025;
+      if(mp.t>1) return false;
+      const x=lerp(mp.x0,mp.x1,mp.t);
+      const y=lerp(mp.y0,mp.y1,mp.t);
+      const alpha=1-Math.abs(mp.t-0.5)*2;
+      ctx.beginPath();
+      ctx.arc(x,y,3,0,TAU);
+      ctx.fillStyle=`rgba(200,150,42,${alpha})`;
+      ctx.fill();
+      return true;
+    });
+
+    // Draw nodes
+    nodes.forEach(name => {
+      const p = nodePos(name);
+      const isLit = litAgent===name;
+      const r = name==='builder' ? 22 : 16;
+      const color = isLit ? '#e8b848' : '#2a3450';
+      const textColor = isLit ? '#060a12' : '#c8a060';
+      const borderColor = isLit ? '#e8b848' : 'rgba(200,150,42,0.35)';
+
+      if(isLit) {
+        ctx.beginPath();
+        ctx.arc(p.x,p.y,r+6,0,TAU);
+        ctx.fillStyle='rgba(200,150,42,0.12)';
+        ctx.fill();
+      }
+
+      ctx.beginPath();
+      ctx.arc(p.x,p.y,r,0,TAU);
+      ctx.fillStyle=color;
+      ctx.fill();
+      ctx.strokeStyle=borderColor;
+      ctx.lineWidth = isLit?2:1;
+      ctx.stroke();
+
+      ctx.font=`bold ${name==='builder'?10:9}px var(--ff-mono,'Space Mono',monospace)`;
+      ctx.fillStyle=textColor;
+      ctx.textAlign='center';
+      ctx.textBaseline='middle';
+      ctx.fillText(labelMap[name], p.x, p.y);
+    });
+
+    // Label
+    ctx.font='10px var(--ff-mono)';
+    ctx.fillStyle='rgba(200,150,42,0.35)';
+    ctx.textAlign='center';
+    ctx.fillText('AGENT HIERARCHY', W*0.27, H*0.12);
+  }
+
+  function drawBlocks() {
+    const bw=42, bh=22;
+    const archBase = H*0.75;
+    const archCx = W*0.52+60;
+
+    // Draw arch goal outline (ghost)
+    ctx.strokeStyle='rgba(200,150,42,0.1)';
+    ctx.lineWidth=1;
+    ctx.setLineDash([4,4]);
+    // left pillar ghost
+    ctx.strokeRect(archCx-36-bw/2, archBase-bh-bh/2, bw, bh*2.5);
+    // right pillar ghost
+    ctx.strokeRect(archCx+36-bw/2, archBase-bh-bh/2, bw, bh*2.5);
+    // crossbar ghost
+    ctx.strokeRect(archCx-bw*1.1, archBase-bh-bh-4-bh/2, bw*2.2, bh);
+    ctx.setLineDash([]);
+
+    // Label
+    ctx.font='10px var(--ff-mono)';
+    ctx.fillStyle='rgba(200,150,42,0.35)';
+    ctx.textAlign='center';
+    ctx.fillText('BLOCK WORLD', W*0.52+60, H*0.12);
+
+    // Draw actual blocks
+    blocks.forEach(b=>{
+      // Animate position
+      if(b.state==='moving' || b.state==='placing') {
+        b.t = Math.min(1, b.t+0.025);
+        const ease = b.t<0.5 ? 2*b.t*b.t : -1+(4-2*b.t)*b.t; // quadratic
+        b.cur.x = lerp(b.cur0.x, b.goal.x, ease);
+        b.cur.y = lerp(b.cur0.y, b.goal.y, ease);
+        if(b.t>=1) { b.state='done'; }
+      }
+
+      const isActive = b.state==='moving'||b.state==='placing';
+      const isDone = b.state==='done';
+
+      if(isActive) {
+        ctx.shadowColor=b.color;
+        ctx.shadowBlur=16;
+      }
+
+      // Draw pillar-height blocks: taller for L and R
+      const blockH = (b.id==='L'||b.id==='R') ? bh*2.2 : bh;
+      ctx.fillStyle=b.color;
+      ctx.beginPath();
+      ctx.roundRect(b.cur.x-bw/2, b.cur.y-blockH/2, bw, blockH, 2);
+      ctx.fill();
+
+      if(isDone||isActive) {
+        ctx.strokeStyle='rgba(255,255,255,0.2)';
+        ctx.lineWidth=1;
+        ctx.stroke();
+      }
+      ctx.shadowBlur=0;
+
+      ctx.font='bold 9px var(--ff-mono)';
+      ctx.fillStyle='rgba(255,255,255,0.6)';
+      ctx.textAlign='center';
+      ctx.textBaseline='middle';
+      ctx.fillText(b.id, b.cur.x, b.cur.y);
+    });
+
+    // Step message
+    if(step>=0 && step<STEPS.length) {
+      const s=STEPS[step];
+      ctx.font='11px var(--ff-mono)';
+      ctx.fillStyle='rgba(200,150,42,0.7)';
+      ctx.textAlign='center';
+      ctx.fillText(`[${s.agent.toUpperCase()}] ${s.msg}`, W*0.65, H*0.88);
+    } else if(step===-1) {
+      ctx.font='11px var(--ff-mono)';
+      ctx.fillStyle='rgba(200,150,42,0.35)';
+      ctx.textAlign='center';
+      ctx.fillText('Press "Build the Arch" to begin', W*0.65, H*0.88);
+    }
+  }
+
+  function draw() {
+    ctx.clearRect(0,0,W,H);
+    // Divider
+    ctx.strokeStyle='rgba(200,150,42,0.1)';
+    ctx.lineWidth=1;
+    ctx.beginPath();
+    ctx.moveTo(W*0.47,H*0.08); ctx.lineTo(W*0.47,H*0.92);
+    ctx.stroke();
+
+    drawHierarchy();
+    drawBlocks();
+    raf = requestAnimationFrame(draw);
+  }
+
+  function advanceStep() {
+    if(step>=STEPS.length-1) { litAgent=null; return; }
+    step++;
+    const s = STEPS[step];
+    litAgent = s.lit ? s.agent : null;
+
+    // Update agent card highlights
+    agents.forEach(a=>{
+      const el=$('#ac-'+a);
+      if(el) el.classList.toggle('lit', a===litAgent);
+    });
+
+    // Spawn message particle from builder to agent
+    if(s.agent!=='builder') {
+      const from=nodePos('builder'), to=nodePos(s.agent);
+      msgParticles.push({x0:from.x,y0:from.y,x1:to.x,y1:to.y,t:0});
+    }
+
+    // Block operations
+    if(s.moveBlock!==undefined) {
+      const b=blocks[s.moveBlock];
+      b.state='moving';
+      b.cur0={...b.cur};
+      // lift up first (mid-point)
+      b.t=0;
+    }
+    if(s.placeBlock!==undefined) {
+      const b=blocks[s.placeBlock];
+      if(b.state!=='done') { b.state='placing'; b.cur0={...b.cur}; b.t=0; }
+    }
+
+    // Schedule next step
+    if(step<STEPS.length-1) {
+      setTimeout(advanceStep, STEP_DELAY*16.67); // ~STEP_DELAY frames
+    } else {
+      litAgent=null;
+      agents.forEach(a=>{ const el=$('#ac-'+a); if(el) el.classList.remove('lit'); });
+    }
+  }
+
+  function startAnimation() {
+    step=-1;
+    litAgent=null;
+    blocks.forEach((b,i)=>{
+      b.cur={...b.cur0_init||b.cur};
+      b.state='idle'; b.t=0;
+    });
+    agents.forEach(a=>{ const el=$('#ac-'+a); if(el) el.classList.remove('lit'); });
+    // reset block positions
+    setupPositions();
+    setTimeout(advanceStep, 400);
+  }
+
+  // Init
+  setupPositions();
+  // Save initial scatter for reset
+  blocks.forEach(b=>{ b.cur0_init={...b.cur}; });
+  draw();
+
+  $('#build-btn').addEventListener('click', startAnimation);
+  window.addEventListener('resize', ()=>{ setupPositions(); });
+})();
+
+
+/* ══════════════════════════════════════════════
+   §2  K-LINES CANVAS — Memory Network
+══════════════════════════════════════════════ */
+(function klinesSection() {
+  const canvas = $('#klines-canvas');
+  const ctx = canvas.getContext('2d');
+  let W, H, raf;
+
+  // Node definitions
+  const NODE_DATA = [
+    // Cluster 1: Rain/Sensory
+    {id:0,  label:'Rain',      cluster:'rain',   x:0.12, y:0.25},
+    {id:1,  label:'Window',    cluster:'rain',   x:0.08, y:0.45},
+    {id:2,  label:'Cold',      cluster:'rain',   x:0.18, y:0.6},
+    {id:3,  label:'Coffee',    cluster:'rain',   x:0.06, y:0.65},
+    {id:4,  label:'Reading',   cluster:'rain',   x:0.22, y:0.38},
+    {id:5,  label:'Blanket',   cluster:'rain',   x:0.14, y:0.75},
+    {id:6,  label:'Afternoon', cluster:'rain',   x:0.28, y:0.68},
+    // Cluster 2: Architecture/Structure
+    {id:7,  label:'Arch',      cluster:'arch',   x:0.5,  y:0.18},
+    {id:8,  label:'Pillar',    cluster:'arch',   x:0.44, y:0.35},
+    {id:9,  label:'Bridge',    cluster:'arch',   x:0.58, y:0.32},
+    {id:10, label:'Stone',     cluster:'arch',   x:0.42, y:0.5},
+    {id:11, label:'Symmetry',  cluster:'arch',   x:0.62, y:0.48},
+    {id:12, label:'Geometry',  cluster:'arch',   x:0.52, y:0.55},
+    {id:13, label:'Support',   cluster:'arch',   x:0.48, y:0.68},
+    // Cluster 3: Code/Debugging
+    {id:14, label:'Function',  cluster:'code',   x:0.82, y:0.28},
+    {id:15, label:'Bug',       cluster:'code',   x:0.92, y:0.4},
+    {id:16, label:'Test',      cluster:'code',   x:0.78, y:0.44},
+    {id:17, label:'Deploy',    cluster:'code',   x:0.88, y:0.58},
+    {id:18, label:'Compile',   cluster:'code',   x:0.72, y:0.55},
+    {id:19, label:'Debug',     cluster:'code',   x:0.85, y:0.7},
+    {id:20, label:'Error',     cluster:'code',   x:0.94, y:0.72},
+    // Cross-cluster bridging nodes
+    {id:21, label:'Pattern',   cluster:'bridge', x:0.36, y:0.22},
+    {id:22, label:'Memory',    cluster:'bridge', x:0.32, y:0.52},
+    {id:23, label:'Logic',     cluster:'bridge', x:0.68, y:0.22},
+    {id:24, label:'Focus',     cluster:'bridge', x:0.7,  y:0.75},
+    {id:25, label:'Calm',      cluster:'bridge', x:0.2,  y:0.18},
+    {id:26, label:'Space',     cluster:'bridge', x:0.5,  y:0.82},
+    {id:27, label:'Routine',   cluster:'bridge', x:0.38, y:0.82},
+  ];
+
+  // Edges [from, to, weight]
+  const EDGES = [
+    // Rain cluster
+    [0,1,1],[0,2,0.7],[0,3,0.9],[0,4,0.8],[1,3,0.6],[2,3,0.8],[3,5,0.7],[4,5,0.5],
+    [2,6,0.6],[5,6,0.5],[3,6,0.4],
+    // Arch cluster
+    [7,8,1],[7,9,0.9],[7,10,0.7],[8,10,0.8],[9,11,0.7],[10,12,0.8],[11,12,0.6],
+    [12,13,0.7],[8,13,0.6],[10,13,0.5],
+    // Code cluster
+    [14,15,0.8],[14,16,0.9],[15,17,0.7],[16,18,0.8],[15,20,0.9],[17,19,0.8],
+    [18,16,0.7],[19,20,0.7],[16,19,0.5],
+    // Cross-cluster
+    [0,25,0.4],[4,22,0.5],[4,21,0.6],[21,7,0.5],[22,10,0.4],[23,7,0.5],[23,14,0.6],
+    [6,27,0.5],[27,26,0.4],[26,13,0.4],[24,19,0.5],[24,18,0.4],[22,27,0.3],
+  ];
+
+  // Trigger definitions: which node is the seed
+  const TRIGGERS = {
+    rain: { seed: 0, label:'Rain' },
+    arch: { seed: 7, label:'Arch' },
+    code: { seed: 15, label:'Bug' }, // debug session
+  };
+
+  let nodes=[]; // runtime state
+  let animating=false;
+
+  function initNodes() {
+    const dpr=window.devicePixelRatio||1;
+    const rect=canvas.getBoundingClientRect();
+    W=rect.width; H=rect.height;
+    canvas.width=W*dpr; canvas.height=H*dpr;
+    ctx.scale(dpr,dpr);
+
+    nodes = NODE_DATA.map(nd=>({
+      ...nd,
+      px: nd.x*W, py: nd.y*H,
+      activation: 0, // 0..1
+      targetActivation: 0,
+      partial: false, // true = partially activated (teal)
+      isSeed: false,
+    }));
+  }
+
+  function resetNodes() {
+    nodes.forEach(n=>{ n.activation=0; n.targetActivation=0; n.partial=false; n.isSeed=false; });
+    $$('.trig-btn').forEach(b=>b.classList.remove('active'));
+  }
+
+  function triggerMemory(type) {
+    resetNodes();
+    animating=true;
+    const trig=TRIGGERS[type];
+    const seed=trig.seed;
+
+    // BFS with delays to simulate cascading activation
+    const delays = new Array(nodes.length).fill(Infinity);
+    const queue=[[seed,0]];
+    delays[seed]=0;
+    nodes[seed].isSeed=true;
+
+    while(queue.length) {
+      const [cur,d]=queue.shift();
+      for(const [a,b,w] of EDGES) {
+        let neighbor=-1;
+        if(a===cur) neighbor=b;
+        else if(b===cur) neighbor=a;
+        if(neighbor>=0 && delays[neighbor]>d+1) {
+          delays[neighbor]=d+1;
+          queue.push([neighbor,d+1]);
+        }
+      }
+    }
+
+    const maxDist=Math.max(...delays.filter(d=>d!==Infinity));
+
+    nodes.forEach((n,i)=>{
+      const d=delays[i];
+      if(d===Infinity) return;
+      const delay=d*280; // ms per hop
+      const isFull = d<=2; // full activation within 2 hops
+      setTimeout(()=>{
+        n.targetActivation = isFull ? 1 : 0.45;
+        n.partial = !isFull;
+      }, delay);
+    });
+  }
+
+  function draw() {
+    ctx.clearRect(0,0,W,H);
+
+    // Animate activations
+    nodes.forEach(n=>{
+      n.activation=lerp(n.activation, n.targetActivation, 0.08);
+    });
+
+    // Draw edges
+    EDGES.forEach(([a,b,w])=>{
+      const na=nodes[a], nb=nodes[b];
+      const act=Math.max(na.activation, nb.activation);
+      let color;
+      if(act>0.5) color=`rgba(200,150,42,${0.15+act*0.45})`;
+      else if(act>0.1) color=`rgba(40,152,176,${0.1+act*0.4})`;
+      else color=`rgba(64,72,88,${0.3*w})`;
+      ctx.beginPath();
+      ctx.moveTo(na.px,na.py);
+      ctx.lineTo(nb.px,nb.py);
+      ctx.strokeStyle=color;
+      ctx.lineWidth=act>0.5?1.5:0.75;
+      ctx.stroke();
+    });
+
+    // Draw nodes
+    nodes.forEach(n=>{
+      const r = n.isSeed ? 7 : (n.activation>0.5?5.5:4);
+      const act=n.activation;
+
+      // Glow
+      if(act>0.2) {
+        ctx.beginPath();
+        ctx.arc(n.px,n.py,r+5,0,TAU);
+        const glowColor = n.partial ? `rgba(40,152,176,${act*0.25})` : `rgba(200,150,42,${act*0.3})`;
+        ctx.fillStyle=glowColor;
+        ctx.fill();
+      }
+
+      // Node fill
+      let fill;
+      if(n.isSeed && act>0.5) fill=`rgba(200,150,42,${0.7+act*0.3})`;
+      else if(act>0.5) fill=`rgba(200,150,42,${0.4+act*0.5})`;
+      else if(act>0.1) fill=`rgba(40,152,176,${0.3+act*0.5})`;
+      else fill='rgba(40,48,64,0.8)';
+
+      ctx.beginPath();
+      ctx.arc(n.px,n.py,r,0,TAU);
+      ctx.fillStyle=fill;
+      ctx.fill();
+      ctx.strokeStyle=act>0.5?'rgba(200,150,42,0.6)':act>0.1?'rgba(40,152,176,0.5)':'rgba(64,72,88,0.5)';
+      ctx.lineWidth=0.75;
+      ctx.stroke();
+
+      // Label
+      const labelAlpha = act>0.1 ? 0.4+act*0.6 : 0.3;
+      ctx.font=`${act>0.5?'bold ':''} 9px var(--ff-mono,monospace)`;
+      ctx.fillStyle=`rgba(240,228,200,${labelAlpha})`;
+      ctx.textAlign='center';
+      ctx.textBaseline='top';
+      ctx.fillText(n.label, n.px, n.py+r+2);
+    });
+
+    raf=requestAnimationFrame(draw);
+  }
+
+  initNodes();
+  draw();
+
+  $$('.trig-btn').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      const type=btn.dataset.trigger;
+      if(type==='reset') { resetNodes(); return; }
+      $$('.trig-btn').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      triggerMemory(type);
+    });
+  });
+  window.addEventListener('resize',()=>{ initNodes(); });
+})();
+
+
+/* ══════════════════════════════════════════════
+   §3  FRAMES — Interactive Slot Explorer
+══════════════════════════════════════════════ */
+(function framesSection() {
+  const SCENES = {
+    restaurant: {
+      name: 'RESTAURANT',
+      slots: [
+        { key:'Environment', val:'Indoor, tables with chairs', default:false },
+        { key:'Roles',       val:'Server, Chef, Host, Customer', default:false },
+        { key:'Objects',     val:'Menu, Plates, Utensils, Glasses', default:false },
+        { key:'Process',     val:'Order → Wait → Served → Eat → Pay', default:false },
+        { key:'Server',      val:'Person in uniform', default:true, label:'Default' },
+        { key:'Payment',     val:'After the meal', default:true, label:'Default' },
+        { key:'Duration',    val:'30–90 minutes', default:true, label:'Default' },
+      ]
+    },
+    office: {
+      name: 'HOME OFFICE',
+      slots: [
+        { key:'Environment', val:'Private room or dedicated space', default:false },
+        { key:'Furniture',   val:'Desk, monitor, chair', default:false },
+        { key:'Objects',     val:'Computer, headphones, coffee', default:false },
+        { key:'Process',     val:'Log in → Work → Break → Work → Log off', default:false },
+        { key:'Noise',       val:'Quiet or ambient music', default:true, label:'Default' },
+        { key:'Colleagues',  val:'Present via video call', default:true, label:'Default' },
+        { key:'Dress code',  val:'Relaxed (often casual)', default:true, label:'Default' },
+      ]
+    },
+    hospital: {
+      name: 'HOSPITAL',
+      slots: [
+        { key:'Environment', val:'Clinical, antiseptic smell', default:false },
+        { key:'Roles',       val:'Doctor, Nurse, Patient, Admin', default:false },
+        { key:'Objects',     val:'Beds, equipment, charts, uniforms', default:false },
+        { key:'Process',     val:'Check-in → Triage → Consult → Treatment', default:false },
+        { key:'Authority',   val:'Doctor has highest agency', default:true, label:'Default' },
+        { key:'Dress',       val:'White coats and scrubs', default:true, label:'Default' },
+        { key:'Urgency',     val:'Moderate to high', default:true, label:'Default' },
+      ]
+    },
+    strange: {
+      name: 'STRANGE ROOM',
+      slots: [
+        { key:'Environment', val:'Indoor room — but something is off', default:false },
+        { key:'Furniture',   val:'Beds, IV stands, medical charts', surprise:true, label:'⚡ Surprise' },
+        { key:'Roles',       val:'People in white coats moving urgently', surprise:true, label:'⚡ Surprise' },
+        { key:'Objects',     val:'Beeping monitors, sterile supplies', surprise:true, label:'⚡ Surprise' },
+        { key:'Frame switch',val:'Activating: HOSPITAL frame', default:true, label:'Updating…' },
+        { key:'Prior frame', val:'HOME was active — defaults now invalid', default:true, label:'Reset' },
+      ]
+    }
+  };
+
+  let currentScene='restaurant';
+
+  function renderScene(sceneKey) {
+    currentScene=sceneKey;
+    const scene=SCENES[sceneKey];
+    $('#frame-name').textContent=scene.name;
+    const container=$('#frame-slots');
+    container.innerHTML='';
+    scene.slots.forEach((slot,i)=>{
+      const row=document.createElement('div');
+      row.className='slot-row';
+      const key=document.createElement('div');
+      key.className='slot-key';
+      key.textContent=slot.key;
+      const val=document.createElement('div');
+      val.className='slot-val' + (slot.default?' default-val':'') + (slot.surprise?' surprise':'');
+      if(slot.surprise) {
+        val.innerHTML=slot.val+`<span class="surprise-tag">${slot.label}</span>`;
+      } else if(slot.label) {
+        val.innerHTML=slot.val;
+      } else {
+        val.textContent=slot.val;
+      }
+      row.appendChild(key);
+      row.appendChild(val);
+      container.appendChild(row);
+      // Staggered reveal
+      setTimeout(()=>row.classList.add('shown'), i*60+80);
+    });
+  }
+
+  $$('.scene-btn').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      $$('.scene-btn').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      renderScene(btn.dataset.scene);
+    });
+  });
+
+  renderScene('restaurant');
+})();
+
+
+/* ══════════════════════════════════════════════
+   §4  DIFFERENCE ENGINE CANVAS
+══════════════════════════════════════════════ */
+(function diffEngineSection() {
+  const canvas = $('#diff-canvas');
+  const ctx = canvas.getContext('2d');
+  let W, H;
+
+  // Block definitions
+  // Each block: id, label, color, startX/Y, goalX/Y, curX/Y, state
+  const BLOCK_COLORS=['#7060a8','#4878a0','#a08040'];
+  let blocks=[];
+  let animating=false;
+  let currentStep=-1;
+
+  const LOG_STEPS = [
+    {type:'dim-line',  text:'// Difference Engine initializing…'},
+    {type:'engine-line', text:'[ENGINE] Analyzing current state vs. goal state…'},
+    {type:'diff-line', text:'[DIFF 1] Block L is not at pillar-left position.'},
+    {type:'sub-line',  text:'  → Sub-goal: place block L at (left pillar).'},
+    {type:'sub-line',  text:'  → Calling SEE… Calling GRASP… Calling PLACE… Calling RELEASE.'},
+    {type:'ok-line',   text:'  ✓ Block L placed. Difference 1 eliminated.'},
+    {type:'engine-line', text:'[ENGINE] Re-scanning…'},
+    {type:'diff-line', text:'[DIFF 2] Block R is not at pillar-right position.'},
+    {type:'sub-line',  text:'  → Sub-goal: place block R at (right pillar).'},
+    {type:'sub-line',  text:'  → Calling SEE… Calling GRASP… Calling PLACE… Calling RELEASE.'},
+    {type:'ok-line',   text:'  ✓ Block R placed. Difference 2 eliminated.'},
+    {type:'engine-line', text:'[ENGINE] Re-scanning…'},
+    {type:'diff-line', text:'[DIFF 3] Crossbar T is not across pillars.'},
+    {type:'sub-line',  text:'  → Sub-goal: place crossbar T across L and R.'},
+    {type:'sub-line',  text:'  → Calling SEE… Calling GRASP… Calling PLACE… Calling RELEASE.'},
+    {type:'ok-line',   text:'  ✓ Crossbar T placed. Difference 3 eliminated.'},
+    {type:'engine-line', text:'[ENGINE] Re-scanning… No differences detected.'},
+    {type:'ok-line',   text:'  ✓ GOAL STATE ACHIEVED. Arch is complete.'},
+  ];
+
+  // Block-move events map to log step indices
+  const BLOCK_MOVES = [
+    {logIdx:4, block:0}, // Block L
+    {logIdx:9, block:1}, // Block R
+    {logIdx:14, block:2}, // Crossbar T
+  ];
+
+  function setup() {
+    const dpr=window.devicePixelRatio||1;
+    const rect=canvas.getBoundingClientRect();
+    W=rect.width; H=rect.height;
+    canvas.width=W*dpr; canvas.height=H*dpr;
+    ctx.scale(dpr,dpr);
+
+    const bw=44, bh=20;
+    const cx=W/2;
+    const scatterY=H*0.55;
+    const archBase=H*0.8;
+    const pillarH=bh*2.5;
+    const archGap=60;
+
+    blocks=[
+      {id:0, label:'L', color:BLOCK_COLORS[0], bw:bw, bh:bh*2.5,
+       sx:cx-110, sy:scatterY, gx:cx-archGap-bw/2, gy:archBase-bh*2.5/2,
+       cx:0, cy:0, t:0, state:'idle'},
+      {id:1, label:'R', color:BLOCK_COLORS[1], bw:bw, bh:bh*2.5,
+       sx:cx+55, sy:scatterY, gx:cx+archGap-bw/2, gy:archBase-bh*2.5/2,
+       cx:0, cy:0, t:0, state:'idle'},
+      {id:2, label:'T', color:BLOCK_COLORS[2], bw:bw*3, bh:bh,
+       sx:cx-20, sy:scatterY-50, gx:cx-bw*1.5, gy:archBase-bh*2.5-bh-4,
+       cx:0, cy:0, t:0, state:'idle'},
+    ];
+    blocks.forEach(b=>{ b.cx=b.sx; b.cy=b.sy; });
+  }
+
+  function resetBlocks() {
+    blocks.forEach(b=>{ b.cx=b.sx; b.cy=b.sy; b.t=0; b.state='idle'; });
+    currentStep=-1;
+    animating=false;
+    $('#gear-wrap').classList.remove('spinning');
+    $('#diff-step-label').textContent='';
+    const log=$('#diff-log');
+    log.innerHTML='<div class="log-line show dim-line">// Waiting to run…</div>';
+  }
+
+  function addLogLine(lineData) {
+    const log=$('#diff-log');
+    const el=document.createElement('div');
+    el.className='log-line '+lineData.type;
+    el.textContent=lineData.text;
+    log.appendChild(el);
+    requestAnimationFrame(()=>el.classList.add('show'));
+    log.scrollTop=log.scrollHeight;
+  }
+
+  function draw() {
+    ctx.clearRect(0,0,W,H);
+
+    // Background grid
+    ctx.strokeStyle='rgba(200,150,42,0.04)';
+    ctx.lineWidth=1;
+    for(let x=0;x<W;x+=40) { ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,H); ctx.stroke(); }
+    for(let y=0;y<H;y+=40) { ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(W,y); ctx.stroke(); }
+
+    // Arch floor line
+    const archBase=H*0.8;
+    ctx.strokeStyle='rgba(200,150,42,0.2)';
+    ctx.lineWidth=1.5;
+    ctx.beginPath(); ctx.moveTo(W*0.2,archBase+20); ctx.lineTo(W*0.8,archBase+20); ctx.stroke();
+
+    // Goal ghost outline
+    const cx=W/2, archGap=60, bh=20, bw=44;
+    ctx.strokeStyle='rgba(200,150,42,0.12)';
+    ctx.lineWidth=1; ctx.setLineDash([5,5]);
+    ctx.strokeRect(cx-archGap-bw/2, archBase-bh*2.5/2-bh*2.5/2, bw, bh*2.5);
+    ctx.strokeRect(cx+archGap-bw/2, archBase-bh*2.5/2-bh*2.5/2, bw, bh*2.5);
+    ctx.strokeRect(cx-bw*1.5, archBase-bh*2.5-bh-4-bh/2, bw*3, bh);
+    ctx.setLineDash([]);
+
+    // Label
+    ctx.font='10px var(--ff-mono,monospace)';
+    ctx.fillStyle='rgba(200,150,42,0.3)';
+    ctx.textAlign='left';
+    ctx.fillText('CURRENT STATE', 20, 22);
+    ctx.textAlign='right';
+    ctx.fillText('GOAL STATE (arch)', W-20, 22);
+    ctx.textAlign='center';
+    ctx.fillText('DIFFERENCE ENGINE', cx, 22);
+
+    // Animate blocks
+    blocks.forEach(b=>{
+      if(b.state==='moving') {
+        b.t=Math.min(1,b.t+0.02);
+        const ease=b.t<0.5?2*b.t*b.t:-1+(4-2*b.t)*b.t;
+        b.cx=lerp(b.sx,b.gx,ease);
+        b.cy=lerp(b.sy,b.gy,ease);
+        if(b.t>=1) b.state='done';
+      }
+
+      const isDone=b.state==='done';
+      ctx.shadowColor=b.color;
+      ctx.shadowBlur=isDone?12:0;
+      ctx.fillStyle=b.color;
+      ctx.beginPath();
+      ctx.roundRect(b.cx, b.cy-b.bh/2, b.bw, b.bh, 2);
+      ctx.fill();
+      ctx.shadowBlur=0;
+
+      ctx.font='bold 10px var(--ff-mono,monospace)';
+      ctx.fillStyle='rgba(255,255,255,0.65)';
+      ctx.textAlign='center';
+      ctx.textBaseline='middle';
+      ctx.fillText(b.label, b.cx+b.bw/2, b.cy);
+    });
+
+    requestAnimationFrame(draw);
+  }
+
+  function runEngine() {
+    if(animating) return;
+    animating=true;
+    currentStep=-1;
+    const log=$('#diff-log');
+    log.innerHTML='';
+    $('#gear-wrap').classList.add('spinning');
+    blocks.forEach(b=>{ b.cx=b.sx; b.cy=b.sy; b.t=0; b.state='idle'; });
+
+    let stepIdx=0;
+    function doNextStep() {
+      if(stepIdx>=LOG_STEPS.length) {
+        $('#gear-wrap').classList.remove('spinning');
+        $('#diff-step-label').textContent='Goal achieved.';
+        animating=false;
+        return;
+      }
+      addLogLine(LOG_STEPS[stepIdx]);
+      $('#diff-step-label').textContent=`Step ${stepIdx+1}/${LOG_STEPS.length}`;
+
+      // Trigger block moves
+      BLOCK_MOVES.forEach(bm=>{
+        if(bm.logIdx===stepIdx) {
+          blocks[bm.block].state='moving';
+          blocks[bm.block].t=0;
+        }
+      });
+
+      stepIdx++;
+      setTimeout(doNextStep, 600);
+    }
+    setTimeout(doNextStep, 200);
+  }
+
+  setup(); draw();
+  $('#diff-run-btn').addEventListener('click',runEngine);
+  $('#diff-reset-btn').addEventListener('click',resetBlocks);
+  window.addEventListener('resize',()=>{ setup(); });
+})();
+
+
+/* ══════════════════════════════════════════════
+   §5  BOIDS — Emergence Simulation
+══════════════════════════════════════════════ */
+(function boidsSection() {
+  const canvas=$('#boids-canvas');
+  const ctx=canvas.getContext('2d');
+  let W,H,raf;
+
+  const N_BOIDS=90;
+  let boids=[];
+  const rules={separation:true,alignment:true,cohesion:true};
+
+  function initBoids() {
+    const dpr=window.devicePixelRatio||1;
+    const rect=canvas.getBoundingClientRect();
+    W=rect.width; H=rect.height;
+    canvas.width=W*dpr; canvas.height=H*dpr;
+    ctx.scale(dpr,dpr);
+
+    boids=[];
+    for(let i=0;i<N_BOIDS;i++) {
+      const angle=rnd(0,TAU);
+      const speed=rnd(1.2,2.4);
+      boids.push({
+        x:rnd(0,W), y:rnd(0,H),
+        vx:Math.cos(angle)*speed,
+        vy:Math.sin(angle)*speed,
+      });
+    }
+  }
+
+  const SEP_DIST=28, ALI_DIST=55, COH_DIST=80;
+  const MAX_SPEED=2.8, MAX_FORCE=0.06;
+
+  function limit(vx,vy,max) {
+    const mag=Math.hypot(vx,vy);
+    if(mag>max) { return [vx/mag*max, vy/mag*max]; }
+    return [vx,vy];
+  }
+
+  function update() {
+    boids.forEach(b=>{
+      let sx=0,sy=0,scnt=0;
+      let ax=0,ay=0,acnt=0;
+      let cx=0,cy=0,ccnt=0;
+
+      boids.forEach(other=>{
+        if(other===b) return;
+        const dx=other.x-b.x, dy=other.y-b.y;
+        const d=Math.hypot(dx,dy);
+
+        if(rules.separation && d<SEP_DIST && d>0) {
+          sx-=dx/d; sy-=dy/d; scnt++;
+        }
+        if(rules.alignment && d<ALI_DIST) {
+          ax+=other.vx; ay+=other.vy; acnt++;
+        }
+        if(rules.cohesion && d<COH_DIST) {
+          cx+=other.x; cy+=other.y; ccnt++;
+        }
+      });
+
+      let fx=0,fy=0;
+
+      if(scnt>0) {
+        const [stx,sty]=limit(sx/scnt,sy/scnt,MAX_FORCE*1.5);
+        fx+=stx; fy+=sty;
+      }
+      if(acnt>0) {
+        const tvx=ax/acnt-b.vx, tvy=ay/acnt-b.vy;
+        const [alx,aly]=limit(tvx,tvy,MAX_FORCE);
+        fx+=alx; fy+=aly;
+      }
+      if(ccnt>0) {
+        const tvx=cx/ccnt-b.x, tvy=cy/ccnt-b.y;
+        const [cex,cey]=limit(tvx,tvy,MAX_FORCE);
+        fx+=cex; fy+=cey;
+      }
+
+      // No rules → random wander
+      if(!rules.separation && !rules.alignment && !rules.cohesion) {
+        fx+=(Math.random()-0.5)*0.1;
+        fy+=(Math.random()-0.5)*0.1;
+      }
+
+      b.vx+=fx; b.vy+=fy;
+      const [nvx,nvy]=limit(b.vx,b.vy,MAX_SPEED);
+      b.vx=nvx; b.vy=nvy;
+      b.x+=b.vx; b.y+=b.vy;
+
+      // Wrap
+      if(b.x<0) b.x=W; if(b.x>W) b.x=0;
+      if(b.y<0) b.y=H; if(b.y>H) b.y=0;
+    });
+  }
+
+  function drawBoid(b) {
+    const angle=Math.atan2(b.vy,b.vx);
+    const hue=(angle/TAU*360+360)%360;
+    const speed=Math.hypot(b.vx,b.vy);
+    const size=5+speed*0.5;
+
+    ctx.save();
+    ctx.translate(b.x,b.y);
+    ctx.rotate(angle);
+    ctx.beginPath();
+    ctx.moveTo(size,0);
+    ctx.lineTo(-size*0.6,size*0.45);
+    ctx.lineTo(-size*0.3,0);
+    ctx.lineTo(-size*0.6,-size*0.45);
+    ctx.closePath();
+    ctx.fillStyle=`hsl(${hue},65%,58%)`;
+    ctx.fill();
+    ctx.restore();
+  }
+
+  function draw() {
+    ctx.clearRect(0,0,W,H);
+    // Subtle background trail
+    ctx.fillStyle='rgba(6,10,18,0.18)';
+    ctx.fillRect(0,0,W,H);
+    update();
+    boids.forEach(drawBoid);
+    raf=requestAnimationFrame(draw);
+  }
+
+  initBoids();
+  draw();
+
+  $$('.rule-card').forEach(card=>{
+    card.addEventListener('click',()=>{
+      const rule=card.dataset.rule;
+      rules[rule]=!rules[rule];
+      card.classList.toggle('on',rules[rule]);
+    });
+  });
+
+  window.addEventListener('resize',()=>{ initBoids(); });
+})();
+
+
+/* ══════════════════════════════════════════════
+   §6  KEY TERMS GRID
+══════════════════════════════════════════════ */
+(function termsSection() {
+  const TERMS = [
+    {realm:'mind',    name:'Agent',             def:'The smallest functional unit of the mind — does exactly one thing.',                 plain:'A "worker" who does one job'},
+    {realm:'mind',    name:'Agency',            def:'A collaborative assembly of agents that presents itself as a single higher-level agent.', plain:'A "department" that looks like one person from outside'},
+    {realm:'mind',    name:'Builder',           def:'A coordinating agent that directs others without doing the work itself.',           plain:'The foreman — doesn\'t work, knows who to call'},
+    {realm:'mind',    name:'K-Line',            def:'The link connecting all agents active during a past experience.',                   plain:'A thread that ties together everyone who was working at that moment'},
+    {realm:'mind',    name:'Frame',             def:'A knowledge template with slots and default values.',                              plain:'A form with pre-filled answers'},
+    {realm:'mind',    name:'Slot',              def:'A position in a Frame where specific information fills in.',                       plain:'The blank in the form'},
+    {realm:'mind',    name:'Default Value',     def:'What a slot assumes when no specific information is given.',                      plain:'"It\'s usually this way" assumption'},
+    {realm:'mind',    name:'Level-Band',        def:'The range of abstraction levels an agent operates within.',                       plain:'Some handle pixels; others handle meaning'},
+    {realm:'mind',    name:'B-Brain',           def:'The metacognitive system that monitors the A-Brain.',                             plain:'"The brain\'s brain" — handles self-observation'},
+    {realm:'mind',    name:'A-Brain',           def:'The main brain that processes the external world.',                               plain:'The brain that does the actual work'},
+    {realm:'mind',    name:'Polyneme',          def:'A signal that activates different meanings in different agencies simultaneously.', plain:'"Red" means danger AND warmth AND stop'},
+    {realm:'mind',    name:'Frame-Array',       def:'Interconnected Frames describing the same thing from different perspectives.',    plain:'A 3D model you can rotate'},
+    {realm:'systems', name:'Emergence',         def:'Complex behavior arising from simple interacting parts, absent in any single part.', plain:'Ants aren\'t smart; ant colonies are'},
+    {realm:'systems', name:'Hierarchy',         def:'Fixed top-down control structure.',                                               plain:'One boss calls the shots'},
+    {realm:'systems', name:'Heterarchy',        def:'Dynamic, context-sensitive control — whoever fits leads.',                        plain:'Jazz improvisation, where leadership shifts'},
+    {realm:'systems', name:'Holism',            def:'Believes the whole cannot be understood by decomposing into parts.',              plain:'"Once you dissect the frog, you\'ve lost the frog"'},
+    {realm:'systems', name:'Reductionism',      def:'Believes everything can be understood by analyzing parts.',                      plain:'"Open it up and see how it works"'},
+    {realm:'systems', name:'Moravec\'s Paradox',def:'What humans find easy is hardest for machines, and vice versa.',                 plain:'Walking is harder than chess'},
+    {realm:'memory',  name:'Partial Activation',def:'A K-Line activates only some of its agents, not all.',                           plain:'Memories are fuzzy because not every worker got recalled'},
+    {realm:'memory',  name:'Summary',           def:'A common pattern extracted from multiple experiences.',                          plain:'Compressing ten experiences into one rule'},
+    {realm:'memory',  name:'Exception',         def:'A case where the summary doesn\'t apply.',                                       plain:'The "but" of a rule'},
+    {realm:'memory',  name:'Papert\'s Principle',def:'Crucial progress comes from new ways of managing knowledge, not new knowledge.', plain:'Learning how to use it beats learning more'},
+    {realm:'memory',  name:'Meta-knowledge',    def:'Knowledge about knowledge — the knowledge that manages knowledge.',              plain:'"Knowing how to learn" beats "knowing what"'},
+    {realm:'reasoning',name:'Difference-Engine',def:'Compare current state to goal, find the gap, close the gap — recursively.',     plain:'The formal version of "fix what\'s broken"'},
+    {realm:'reasoning',name:'Default Reasoning',def:'Assuming normal conditions in the absence of contrary evidence.',               plain:'"Generally speaking…" — good enough 99% of the time'},
+    {realm:'reasoning',name:'Analogical Reasoning',def:'Mapping the structure of a known domain to an unknown one.',                 plain:'"This is just like that" — but deeper'},
+    {realm:'reasoning',name:'Reformulation',    def:'Restating a problem in a different form to solve it.',                           plain:'A different way of saying it might make it click'},
+    {realm:'reasoning',name:'Trans-Frame',      def:'Describes change: origin state, destination state, difference, cause.',         plain:'Before → After + what changed + why'},
+    {realm:'self',     name:'Self-Model',        def:'The mind\'s simplified internal description of "me."',                          plain:'Who you think you are ≠ who you actually are'},
+    {realm:'self',     name:'Suppressor',        def:'Pushes down a thought after it has formed.',                                    plain:'"On second thought, no"'},
+    {realm:'self',     name:'Censor',            def:'Blocks a thought before it can even form.',                                     plain:'You\'d never think of that idea — it\'s pre-empted'},
+    {realm:'self',     name:'Cognitive Mode',    def:'The emotional state determines how agents collaborate.',                        plain:'Same team, different management policy'},
+    {realm:'self',     name:'Narrative Illusion',def:'The continuity of consciousness is an illusion produced by rapid switching.',  plain:'Thought isn\'t a river — it\'s switching slides'},
+    {realm:'comm',     name:'Pronome',           def:'Internal mechanism tracking current reference — like a pronoun in thought.',    plain:'The mind\'s "who does \'it\' refer to?" ledger'},
+    {realm:'comm',     name:'Expression Gap',    def:'The information lost between thinking and language.',                          plain:'Thinking it but not being able to say it'},
+    {realm:'comm',     name:'Microneme',         def:'An extremely faint background cognitive coloring.',                            plain:'"Something\'s off" before you can say why'},
+    {realm:'perception',name:'Active Perception',def:'Perception is active construction, not passive reception.',                    plain:'What you see is what your brain lets you see'},
+    {realm:'perception',name:'Mental Image',     def:'An internally generated pattern of perceptual activity.',                     plain:'The "picture" when you close your eyes and imagine'},
+    {realm:'perception',name:'Naive Physics',    def:'Built-in commonsense physical rules about the world.',                        plain:'"Things fall down" — imprecise but sufficient'},
+  ];
+
+  const grid=$('#terms-grid');
+  let activeRealm='all';
+
+  function render() {
+    grid.innerHTML='';
+    const filtered=activeRealm==='all'?TERMS:TERMS.filter(t=>t.realm===activeRealm);
+    filtered.forEach((t,i)=>{
+      const card=document.createElement('div');
+      card.className='term-card reveal';
+      card.dataset.realm=t.realm;
+      const realmNames={
+        mind:'Mind Architecture',systems:'Systems & Structure',memory:'Memory & Learning',
+        reasoning:'Reasoning',self:'Self & Identity',comm:'Communication',perception:'Perception & Action'
+      };
+      card.innerHTML=`
+        <div class="tc-realm">${realmNames[t.realm]}</div>
+        <div class="tc-name">${t.name}</div>
+        <div class="tc-def">${t.def}</div>
+        <div class="tc-plain">"${t.plain}"</div>
+      `;
+      grid.appendChild(card);
+      observer.observe(card);
+    });
+  }
+
+  $$('.realm-f').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      $$('.realm-f').forEach(b=>b.classList.remove('on'));
+      btn.classList.add('on');
+      activeRealm=btn.dataset.realm;
+      render();
+    });
+  });
+
+  render();
+})();
+</script>
+</body>
+</html>

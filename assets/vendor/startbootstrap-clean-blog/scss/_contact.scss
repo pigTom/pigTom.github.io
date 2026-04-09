@@ -1,3 +1,6 @@
+@use "variables" as *;
+@use "mixins" as *;
+
 // Styling for the contact page
 .floating-label-form-group {
   font-size: 14px;

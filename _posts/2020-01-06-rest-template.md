@@ -38,8 +38,6 @@ date: 2020-01-06 00:00:00 +0800
  ResponseEntity response = restTemplate.postForObject(url,  dto,ResponseEntity.class);
 ```
 
-![haha](/Users/tangdunhong/Desktop/屏幕快照 2020-01-06 下午8.52.53.png)
-
 这是在同一个ip不同的端口下的测试的，分别是8800, 8802和8804
 
 
